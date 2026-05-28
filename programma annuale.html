@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Trail 2027">
+  <meta name="theme-color" content="#080a0d">
+  <link rel="manifest" href="manifest.json">
+  <title>Trail 2027 — Road to Sub 1h20m</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Barlow:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    :root {
+      --bg: #080a0d;
+      --bg2: #0f1318;
+      --bg3: #151b22;
+      --bg4: #1c2430;
+      --border: #1e2733;
+      --border2: #263040;
+      --text: #e8eef5;
+      --muted: #7a8899;
+      --dim: #3d4d5c;
+      --accent: #f97316;
+      --accent2: #fb923c;
+      --green: #22c55e;
+      --blue: #3b82f6;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --purple: #a855f7;
+      --cyan: #06b6d4;
+      --winter: #7dd3fc;
+    }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Barlow Condensed', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(160deg, #0d1520 0%, #1a0800 40%, #08060d 100%);
+      border-bottom: 2px solid var(--accent);
+      padding: 28px 20px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 80px,
+        rgba(249,115,22,0.025) 80px,
+        rgba(249,115,22,0.025) 81px
+      );
+      pointer-events: none;
+    }
+    .header-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+    .header-eyebrow {
+      font-size: 10px; letter-spacing: 5px; color: var(--accent);
+      font-family: 'Barlow', sans-serif; font-weight: 600;
+      margin-bottom: 8px; text-transform: uppercase;
+    }
+    .header-title {
+      font-size: clamp(28px, 7vw, 52px);
+      font-weight: 900; line-height: 0.95;
+      letter-spacing: -1px; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .header-title span { color: var(--accent); }
+    .header-meta {
+      display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+      font-family: 'Barlow', sans-serif; font-size: 12px; color: var(--muted);
+    }
+    .header-badge {
+      background: rgba(249,115,22,0.12); border: 1px solid rgba(249,115,22,0.4);
+      color: var(--accent); padding: 4px 10px; font-size: 11px;
+      font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 2px;
+    }
+    .header-badge.winter {
+      background: rgba(125,211,252,0.08); border-color: rgba(125,211,252,0.3);
+      color: var(--winter);
+    }
+    .countdown-bar {
+      margin-top: 16px; display: flex; gap: 8px; align-items: stretch;
+    }
+    .countdown-item {
+      flex: 1; background: rgba(255,255,255,0.04); border: 1px solid var(--border2);
+      padding: 10px 6px; text-align: center;
+    }
+    .countdown-val { font-size: 24px; font-weight: 900; color: var(--accent); line-height: 1; }
+    .countdown-label { font-size: 8px; color: var(--muted); letter-spacing: 2px; font-family: 'Barlow', sans-serif; margin-top: 3px; }
+
+    /* ── TABS ── */
+    .tabs {
+      display: flex; background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      background: none; border: none;
+      border-bottom: 2px solid transparent;
+      padding: 13px 16px; color: var(--muted);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 10px;
+      letter-spacing: 1.5px; text-transform: uppercase;
+      cursor: pointer; white-space: nowrap;
+      transition: color 0.2s; flex-shrink: 0;
+    }
+    .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* ── CONTENT ── */
+    .content { padding: 20px 16px 80px; max-width: 700px; margin: 0 auto; }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp 0.25s ease; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTION LABELS ── */
+    .sec-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 4px;
+      color: var(--accent); text-transform: uppercase;
+      margin-bottom: 14px; margin-top: 24px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .sec-label:first-child { margin-top: 0; }
+    .sec-label::after {
+      content: ''; flex: 1; height: 1px;
+      background: linear-gradient(90deg, var(--border2), transparent);
+    }
+
+    /* ── TIMELINE (MACROCICLO) ── */
+    .timeline { position: relative; }
+    .timeline-line {
+      position: absolute; left: 22px; top: 0; bottom: 0;
+      width: 2px; background: linear-gradient(to bottom, var(--accent), var(--border), transparent);
+    }
+    .phase-block {
+      position: relative; padding-left: 52px; margin-bottom: 6px;
+    }
+    .phase-dot {
+      position: absolute; left: 14px; top: 18px;
+      width: 18px; height: 18px; border-radius: 50%;
+      border: 2px solid; display: flex; align-items: center;
+      justify-content: center; font-size: 9px; font-weight: 900;
+      z-index: 2; background: var(--bg);
+    }
+    .phase-card {
+      border: 1px solid var(--border); background: var(--bg3);
+      border-left: 4px solid; padding: 14px 16px;
+      cursor: pointer; transition: border-color 0.2s;
+    }
+    .phase-card.open { border-color: currentColor !important; }
+    .phase-header {
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .phase-months {
+      font-size: 9px; letter-spacing: 2px; color: var(--muted);
+      font-family: 'Barlow', sans-serif; flex-shrink: 0;
+    }
+    .phase-name { font-size: 15px; font-weight: 800; flex: 1; }
+    .phase-tag {
+      font-size: 8px; letter-spacing: 2px; padding: 2px 8px;
+      border: 1px solid; font-weight: 700; flex-shrink: 0;
+    }
+    .phase-chevron { color: var(--dim); font-size: 14px; transition: transform 0.2s; flex-shrink: 0; }
+    .phase-card.open .phase-chevron { transform: rotate(180deg); }
+    .phase-focus {
+      font-family: 'Barlow', sans-serif; font-size: 12px;
+      color: var(--muted); line-height: 1.6; margin-top: 8px;
+    }
+    .phase-body {
+      display: none; border-top: 1px solid var(--border);
+      padding-top: 14px; margin-top: 14px;
+    }
+    .phase-card.open .phase-body { display: block; }
+
+    /* ── WEEK BLOCKS inside phase ── */
+    .week-row {
+      display: flex; gap: 8px; align-items: flex-start;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .week-row:last-child { border-bottom: none; }
+    .week-num {
+      font-size: 11px; font-weight: 800; color: var(--muted);
+      letter-spacing: 1px; min-width: 28px; padding-top: 1px;
+      flex-shrink: 0;
+    }
+    .week-content { flex: 1; }
+    .week-title { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .week-items { display: flex; flex-direction: column; gap: 3px; }
+    .week-item {
+      font-family: 'Barlow', sans-serif; font-size: 12px;
+      color: var(--muted); line-height: 1.5;
+      display: flex; gap: 6px; align-items: flex-start;
+    }
+    .week-item::before { content: '▸'; color: var(--accent); flex-shrink: 0; font-size: 9px; margin-top: 3px; }
+    .week-badge {
+      font-size: 8px; letter-spacing: 2px; padding: 1px 6px;
+      border: 1px solid; font-weight: 700; margin-left: auto;
+      flex-shrink: 0; align-self: flex-start; margin-top: 2px;
+    }
+
+    /* ── PRINCIPLE CARDS ── */
+    .principle-card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-left: 4px solid; padding: 16px; margin-bottom: 10px;
+    }
+    .principle-title { font-size: 14px; font-weight: 800; margin-bottom: 6px; }
+    .principle-body {
+      font-family: 'Barlow', sans-serif; font-size: 12px;
+      color: var(--muted); line-height: 1.7;
+    }
+
+    /* ── WINTER BLOCK ── */
+    .winter-card {
+      background: rgba(125,211,252,0.04);
+      border: 1px solid rgba(125,211,252,0.2);
+      border-left: 4px solid var(--winter);
+      padding: 18px; margin-bottom: 10px;
+    }
+    .winter-title { font-size: 15px; font-weight: 800; color: var(--winter); margin-bottom: 6px; }
+    .winter-body { font-family: 'Barlow', sans-serif; font-size: 12px; color: var(--muted); line-height: 1.7; }
+
+    /* ── VOLUME CHART ── */
+    .vol-chart { display: flex; align-items: flex-end; gap: 4px; height: 80px; margin-bottom: 8px; }
+    .vol-bar {
+      flex: 1; border-radius: 2px 2px 0 0;
+      position: relative; min-height: 4px;
+      transition: opacity 0.2s;
+    }
+    .vol-bar:hover { opacity: 0.8; }
+    .vol-labels { display: flex; gap: 4px; }
+    .vol-label { flex: 1; text-align: center; font-size: 8px; color: var(--muted); letter-spacing: 0.5px; font-family: 'Barlow', sans-serif; }
+
+    /* ── STATS ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 14px; }
+    .stat-box { background: var(--bg3); border: 1px solid var(--border); padding: 14px 12px; }
+    .stat-box-label { font-size: 9px; color: var(--muted); letter-spacing: 3px; font-family: 'Barlow', sans-serif; margin-bottom: 4px; }
+    .stat-box-val { font-size: 22px; font-weight: 900; color: var(--accent); line-height: 1; }
+    .stat-box-sub { font-size: 10px; color: var(--dim); font-family: 'Barlow', sans-serif; margin-top: 3px; }
+
+    /* ── RACE DAY ── */
+    .race-card {
+      background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(249,115,22,0.08));
+      border: 2px solid var(--purple); padding: 20px; margin-bottom: 12px;
+      position: relative; overflow: hidden;
+    }
+    .race-card::before {
+      content: '🏆';
+      position: absolute; right: 16px; top: 12px;
+      font-size: 36px; opacity: 0.3;
+    }
+    .race-title { font-size: 18px; font-weight: 900; color: var(--purple); margin-bottom: 4px; }
+    .race-date { font-family: 'Barlow', sans-serif; font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    .race-target { font-size: 32px; font-weight: 900; color: var(--accent); }
+    .race-target-label { font-size: 9px; color: var(--muted); letter-spacing: 3px; font-family: 'Barlow', sans-serif; margin-top: 2px; }
+
+    /* ── FOOTER ── */
+    .footer {
+      text-align: center; font-family: 'Barlow', sans-serif;
+      font-size: 10px; color: var(--dim); letter-spacing: 2px;
+      border-top: 1px solid var(--border);
+      padding: 20px 0 10px; margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="header-eyebrow">Programma Annuale · Maggio 2026 → Aprile 2027</div>
+      <div class="header-title">Road to<br><span>Sub 1h20m</span></div>
+      <div class="header-meta">
+        <div class="header-badge">TRAIL DELLE LONGANE 2027</div>
+        <div class="header-badge winter">❄️ BLOCCO INVERNALE NOV–MAR</div>
+      </div>
+      <div class="countdown-bar" id="countdown-bar"></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="macrociclo">📅 Macrociclo</button>
+    <button class="tab-btn" data-tab="lower">🦵 Lower Body</button>
+    <button class="tab-btn" data-tab="inverno">❄️ Inverno</button>
+    <button class="tab-btn" data-tab="principi">📐 Principi</button>
+    <button class="tab-btn" data-tab="gara">🏆 Gara</button>
+  </div>
+
+  <div class="content">
+
+    <!-- ===== MACROCICLO ===== -->
+    <div class="tab-panel active" id="tab-macrociclo">
+
+      <div class="sec-label">Visione d'insieme — 12 mesi</div>
+
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-box-label">SETTIMANE TOTALI</div>
+          <div class="stat-box-val">48</div>
+          <div class="stat-box-sub">di programmazione reale</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">BLOCCO INVERNALE</div>
+          <div class="stat-box-val" style="color:var(--winter)">~20</div>
+          <div class="stat-box-sub">sett. senza corsa outdoor</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">OBIETTIVO GARA</div>
+          <div class="stat-box-val" style="color:var(--purple)">Sub 1h20</div>
+          <div class="stat-box-sub">fine aprile 2027</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-box-label">PB PRECEDENTE</div>
+          <div class="stat-box-val" style="color:var(--muted)">1h33m</div>
+          <div class="stat-box-sub">TDL 2023 — miglioramento: 13'</div>
+        </div>
+      </div>
+
+      <div class="sec-label">Volume corsa stimato per mese</div>
+      <div class="vol-chart" id="vol-chart"></div>
+      <div class="vol-labels" id="vol-labels"></div>
+
+      <div class="sec-label" style="margin-top:20px">Fasi di allenamento</div>
+      <div class="timeline" id="timeline-container">
+        <div class="timeline-line"></div>
+      </div>
+
+    </div>
+
+    <!-- ===== LOWER BODY ===== -->
+    <div class="tab-panel" id="tab-lower">
+
+      <div class="sec-label">Logica di progressione — tutto l'anno</div>
+
+      <div class="principle-card" style="border-left-color:var(--accent)">
+        <div class="principle-title" style="color:var(--accent)">L'ordine non è casuale</div>
+        <div class="principle-body">
+          La progressione segue una logica precisa costruita attorno al tuo ginocchio con fastidio post-intensità:<br><br>
+          <strong style="color:var(--text)">1. Isometrie e tendini</strong> — sempre, da subito, proteggono l'articolazione<br>
+          <strong style="color:var(--text)">2. Forza unilaterale pesante</strong> — costruisce la base muscolare specifica per le salite<br>
+          <strong style="color:var(--text)">3. Pliometria</strong> — solo da estate, quando ginocchio e tendini sono rinforzati<br><br>
+          Non si brucia nessuna fase. La pliometria fatta troppo presto con un ginocchio non ancora rinforzato è il modo più veloce per fermarsi 8 settimane.
+        </div>
+      </div>
+
+      <div class="sec-label">Fase 1 — Fondamenta (Mag–Giu 2026)</div>
+
+      <div id="lower-p1"></div>
+
+      <div class="sec-label">Fase 2 — Costruzione Estiva (Lug–Ott 2026)</div>
+
+      <div id="lower-p2"></div>
+
+      <div class="sec-label">Fase 3 — Blocco Invernale (Nov 2026–Mar 2027)</div>
+
+      <div id="lower-p3"></div>
+
+      <div class="sec-label">Fase 4 — Pre-Gara (Apr 2027)</div>
+
+      <div id="lower-p4"></div>
+
+      <div class="sec-label">Esercizi — Riferimento rapido</div>
+      <div id="lower-glossary"></div>
+
+    </div>
+
+    <!-- ===== INVERNO ===== -->
+
+    <div class="tab-panel" id="tab-inverno">
+
+      <div class="sec-label">Strategia invernale (Nov 2026 – Mar 2027)</div>
+
+      <div class="winter-card">
+        <div class="winter-title">❄️ Il blocco invernale NON è una pausa</div>
+        <div class="winter-body">
+          Novembre–Marzo è il periodo in cui costruisci la <strong style="color:var(--text)">base fisiologica profonda</strong> che rende possibile il picco di aprile. Lo sci alpino e lo sci alpinismo ti danno un vantaggio enorme: mantengono il VO2max, allenano le cosce e il core in modo specifico per la montagna, e sviluppano l'equilibrio e la propriocezione su terreni tecnici — esattamente ciò che serve per il trail.
+        </div>
+      </div>
+
+      <div class="winter-card" style="border-left-color:var(--accent)">
+        <div class="winter-title" style="color:var(--accent)">🏋️ Priorità assoluta: pesi e ipertrofia</div>
+        <div class="winter-body">
+          Con la corsa ferma, l'inverno è il momento <strong style="color:var(--text)">migliore dell'anno per guadagnare massa muscolare</strong>. Senza lo stress della corsa ad alto volume, il recupero è superiore e il surplus calorico è più tollerabile. Target: arrivare a fine marzo a 65–66 kg con upper body sviluppato e gambe forti. Il protocollo è lo stesso del programma 6 settimane, con progressione sui carichi.
+        </div>
+      </div>
+
+      <div class="sec-label">Programma tipo settimana invernale</div>
+
+      <div id="winter-week-container"></div>
+
+      <div class="sec-label">Sci alpino come allenamento</div>
+
+      <div class="principle-card" style="border-left-color:var(--winter)">
+        <div class="principle-title" style="color:var(--winter)">🎿 Sci alpino — valore per il trail</div>
+        <div class="principle-body">
+          Una giornata di sci a media-alta intensità equivale a una sessione Z2–Z3 da 45–60 minuti. Le cosce lavorano in contrazione eccentrica prolungata (esattamente come le discese trail), il core è costantemente attivato per l'equilibrio e il cardio rimane allenato. Conta ogni giornata di sci come una "sessione cardio sostitutiva" nella pianificazione settimanale.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--accent)">
+        <div class="principle-title" style="color:var(--accent)">🏔️ Sci alpinismo — bonus specifico</div>
+        <div class="principle-body">
+          Lo sci alpinismo è forse l'attività più specifica al trail running che esiste in inverno: salite lunghe con bastoncini, gestione del fiato in quota, carico muscolare sulle gambe. Ogni uscita SA vale come una long run di qualità. Se riesci a fare 2–3 uscite SA al mese tra dicembre e febbraio, arrivi alla primavera con una base aerobica di altissimo livello.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== PRINCIPI ===== -->
+    <div class="tab-panel" id="tab-principi">
+
+      <div class="sec-label">Principi della programmazione annuale</div>
+
+      <div class="principle-card" style="border-left-color:var(--blue)">
+        <div class="principle-title" style="color:var(--blue)">📈 Periodizzazione a blocchi</div>
+        <div class="principle-body">
+          Non si può essere in forma per 12 mesi. Il corpo si adatta a stimoli progressivi e poi ha bisogno di consolidare. La struttura è: <strong style="color:var(--text)">costruisci → consolida → costruisci più in alto → picco</strong>. Ogni fase ha uno scopo preciso e non si salta nessun blocco, pena perdere l'effetto cumulativo.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--green)">
+        <div class="principle-title" style="color:var(--green)">🦵 Forza prima di tutto</div>
+        <div class="principle-body">
+          Con un pregresso di infortunio al ginocchio e crampi muscolari in gara, la forza non è accessoria: è la fondamenta. L'ipertrofia invernale e il mantenimento forza primaverile proteggono l'articolazione, prevengono i crampi e migliorano l'economia di corsa in salita. Ogni chilo in più di massa muscolare funzionale ti porta via un minuto dalla gara.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--yellow)">
+        <div class="principle-title" style="color:var(--yellow)">⚖️ Regola del 10%</div>
+        <div class="principle-body">
+          Il volume settimanale di corsa non aumenta mai più del 10% a settimana. Questa regola protegge dai classici infortuni da overuse (periostite, tendine d'achille, fascia plantare) che rovinano i piani degli atleti ambiziosi. Meglio arrivare un po' meno allenati ma integri che arrivare infortunati.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--accent)">
+        <div class="principle-title" style="color:var(--accent)">🏭 Gestione fabbrica</div>
+        <div class="principle-body">
+          Il lavoro fisico di 8 ore al giorno è uno stress reale sul sistema nervoso e muscolare. Non va ignorato nella pianificazione: nei giorni di fatica alta usa sempre la Variante Light o la Routine Post-Fabbrica da 20 minuti. La consistenza su 12 mesi batte l'intensità casuale di 6 settimane.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--red)">
+        <div class="principle-title" style="color:var(--red)">🚨 Deload obbligatori</div>
+        <div class="principle-body">
+          Ogni 3–4 settimane è programmata una settimana di scarico (volume –40%). Non è opzionale. È durante il deload che il corpo recepisce i miglioramenti delle settimane precedenti. Saltare il deload per "fare di più" è uno degli errori più comuni negli atleti amatoriali.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--purple)">
+        <div class="principle-title" style="color:var(--purple)">🎯 La gara di test</div>
+        <div class="principle-body">
+          A settembre/ottobre 2026 è inserita una gara o un allenamento simulato su percorso simile al TDL. Serve per testare la forma, capire dove si è e aggiustare il piano invernale. Non è la gara obiettivo: è un barometro.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ===== GARA ===== -->
+    <div class="tab-panel" id="tab-gara">
+
+      <div class="race-card">
+        <div class="race-title">Trail delle Longane</div>
+        <div class="race-date">Fine aprile 2027 · Precedente: 1h33m (2023)</div>
+        <div class="race-target">Sub 1h20m</div>
+        <div class="race-target-label">TARGET — miglioramento di 13 minuti</div>
+      </div>
+
+      <div class="sec-label">Come si costruiscono 13 minuti in meno</div>
+
+      <div class="principle-card" style="border-left-color:var(--green)">
+        <div class="principle-title" style="color:var(--green)">+3–4 min da base aerobica Z2</div>
+        <div class="principle-body">
+          Aumentare il volume Z2 da marzo ad aprile porta la soglia anaerobica più in alto: corri più veloce alla stessa fatica percepita. Questo si guadagna principalmente nella Fase 3 (primavera) con le uscite lunghe progressivi.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--blue)">
+        <div class="principle-title" style="color:var(--blue)">+3–4 min da forza gambe</div>
+        <div class="principle-body">
+          Gambe più forti = meno cedimento muscolare nelle salite finali = nessun crampo = ritmo mantenuto fino all'arrivo. Il miglioramento invernale sullo squat bulgaro (da 14 kg a 20 kg+) e l'ipertrofia si traducono direttamente in resistenza sulle salite.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--yellow)">
+        <div class="principle-title" style="color:var(--yellow)">+3–5 min da gestione di gara</div>
+        <div class="principle-body">
+          Nel 2023 i crampi nell'ultima salita ti hanno bloccato. Con il protocollo anti-crampi (magnesio, gel ogni 35 min, isometria bulgaro) e la simulazione di gara di W5 nel blocco pre-gara, arrivi all'ultima salita con risorse muscolari ancora disponibili.
+        </div>
+      </div>
+
+      <div class="principle-card" style="border-left-color:var(--accent)">
+        <div class="principle-title" style="color:var(--accent)">+2–3 min da tecnica trail</div>
+        <div class="principle-body">
+          Le uscite su terreno tecnico a ottobre e le simulazioni di aprile sviluppano la tecnica di discesa (corpo in avanti, passi brevi) e l'uso dei bastoncini in salita. Il tempo si guadagna soprattutto nelle discese, dove molti atleti amatoriali perdono 2–3 minuti per prudenza eccessiva.
+        </div>
+      </div>
+
+      <div class="sec-label">Strategia di gara finale</div>
+
+      <div id="race-strategy-container"></div>
+
+    </div>
+
+  </div><!-- /content -->
+
+  <div class="footer">TRAIL 2027 · ROAD TO SUB 1H20M · PROGRAMMA ANNUALE</div>
+
+  <script>
+  (function() {
+
+    // ── COUNTDOWN ──
+    (function buildCountdown() {
+      const target = new Date('2027-04-25T00:00:00');
+      const now = new Date();
+      const diff = target - now;
+      const days = Math.floor(diff / 86400000);
+      const weeks = Math.floor(days / 7);
+      const months = Math.floor(days / 30.44);
+      const items = [
+        { val: months, label: 'MESI' },
+        { val: weeks, label: 'SETTIMANE' },
+        { val: days, label: 'GIORNI' },
+        { val: '1h20m', label: 'TARGET' },
+      ];
+      const bar = document.getElementById('countdown-bar');
+      items.forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'countdown-item';
+        el.innerHTML = `<div class="countdown-val">${item.val}</div><div class="countdown-label">${item.label}</div>`;
+        bar.appendChild(el);
+      });
+    })();
+
+    // ── VOLUME CHART ──
+    (function buildVolChart() {
+      // Estimated weekly km per month (0 = full winter block)
+      const months = [
+        { label: 'MAG', km: 30, color: '#3b82f6' },
+        { label: 'GIU', km: 45, color: '#3b82f6' },
+        { label: 'LUG', km: 55, color: '#f97316' },
+        { label: 'AGO', km: 60, color: '#f97316' },
+        { label: 'SET', km: 55, color: '#f97316' },
+        { label: 'OTT', km: 50, color: '#f97316' },
+        { label: 'NOV', km: 15, color: '#7dd3fc' },
+        { label: 'DIC', km: 8,  color: '#7dd3fc' },
+        { label: 'GEN', km: 5,  color: '#7dd3fc' },
+        { label: 'FEB', km: 8,  color: '#7dd3fc' },
+        { label: 'MAR', km: 20, color: '#22c55e' },
+        { label: 'APR', km: 65, color: '#a855f7' },
+      ];
+      const maxKm = Math.max(...months.map(m => m.km));
+      const chart = document.getElementById('vol-chart');
+      const labels = document.getElementById('vol-labels');
+      months.forEach(m => {
+        const pct = Math.max((m.km / maxKm) * 100, 4);
+        const bar = document.createElement('div');
+        bar.className = 'vol-bar';
+        bar.style.height = pct + '%';
+        bar.style.background = m.km <= 10 ? 'rgba(125,211,252,0.25)' : m.color + 'cc';
+        bar.style.border = '1px solid ' + m.color + '44';
+        bar.title = m.label + ': ~' + m.km + ' km/sett';
+        chart.appendChild(bar);
+
+        const lbl = document.createElement('div');
+        lbl.className = 'vol-label';
+        lbl.textContent = m.label;
+        labels.appendChild(lbl);
+      });
+    })();
+
+    // ── PHASES DATA ──
+    const phases = [
+      {
+        id: 'p1',
+        months: 'MAG – GIU 2026',
+        name: 'Fase 1 — Fondamenta',
+        tag: '8 SETTIMANE',
+        color: '#3b82f6',
+        focus: 'Esegui il programma 6 settimane esistente (Trail + Ipertrofia). Poi 2 settimane di consolidamento. Obiettivo: arrivare a 65 kg, manubri 20 kg lower body, base Z2 solida.',
+        weeks: [
+          { num: 'W1–W2', title: 'Adattamento (dal programma 6 sett.)', items: ['Squat bulgaro 14→16 kg, piede su panca', 'Z2 a 5:00-5:15 min/km — 35-55 min', 'Domenica sempre Z1 dopo calcetto'] },
+          { num: 'W3–W5', title: 'Costruzione (dal programma 6 sett.)', items: ['Introduzione Z4 soglia — intervalli 4:40', 'Milestone 20 kg lower body a W5', 'Simulazione gara 70 min con bastoncini'] },
+          { num: 'W6', title: 'Taper + Gara Test (opzionale)', badge: 'TEST', badgeColor: '#a855f7', items: ['Se c\'è una gara locale → usala come test', 'Altrimenti: cronometro personale su salita simile TDL', 'Obiettivo: conoscere la forma attuale'] },
+          { num: 'W7–W8', title: 'Consolidamento post-programma', items: ['Volume corsa +10% rispetto a W5 (regola 10%)', 'Pesi: mantenimento carichi, nessuna progressione', '1 uscita tecnica su trail con dislivello'] },
+        ]
+      },
+      {
+        id: 'p2',
+        months: 'LUG – OTT 2026',
+        name: 'Fase 2 — Costruzione Estiva',
+        tag: '16 SETTIMANE',
+        color: '#f97316',
+        focus: 'Massima finestra outdoor. Volume corsa in progressione, uscite lunghe su trail tecnico, mantenimento forza. Ogni 4 settimane: deload. A settembre/ottobre: gara o simulazione test.',
+        weeks: [
+          { num: 'LUG W1–W3', title: 'Volume base — Z2 progressivo', items: ['Long run domenica: 60 → 75 → 85 min Z2', 'Martedì: Z4 intervalli (4:40) — 4×5 min → 5×6 min', 'Pesi 2x/sett: mantenimento forza senza eccedere'] },
+          { num: 'LUG W4', title: 'Deload #1', badge: 'DELOAD', badgeColor: '#22c55e', items: ['Volume corsa –40%', 'Pesi leggeri, solo mobilità e recupero', 'Rilascio miofasciale intensivo gambe'] },
+          { num: 'AGO W1–W3', title: 'Uscite tecniche trail', items: ['Long run su percorso tecnico con dislivello: 90 → 100 min', 'Introduzione bastoncini sistematica su pendenze >15%', 'Allenamento discese: tecnica corpo in avanti, passo breve'] },
+          { num: 'AGO W4', title: 'Deload #2', badge: 'DELOAD', badgeColor: '#22c55e', items: ['Come deload #1'] },
+          { num: 'SET W1–W3', title: 'Picco volume estivo', items: ['Long run: 100–110 min su percorso simile TDL', 'Z4 progressivo: 5×6 min → 6×5 min a ~4:35', 'Simulazione completa con gel + protocollo anti-crampi'] },
+          { num: 'SET W4 / OTT', title: 'GARA TEST o Simulazione', badge: 'GARA TEST', badgeColor: '#a855f7', items: ['Partecipa a una gara trail locale (10–15 km, dislivello)', 'Obiettivo: non il tempo, ma testare gel, bastoncini, gestione salite', 'Analisi post-gara: dove si è perso tempo? Crampi? Tecnica discesa?'] },
+        ]
+      },
+      {
+        id: 'p3',
+        months: 'NOV 2026 – MAR 2027',
+        name: 'Fase 3 — Blocco Invernale',
+        tag: '~20 SETTIMANE',
+        color: '#7dd3fc',
+        focus: 'Zero o quasi corsa outdoor. Massima ipertrofia, forza, sci alpino e sci alpinismo come cardio sostitutivo. Obiettivo: arrivare a marzo più forte e più pesante (65–66 kg).',
+        weeks: [
+          { num: 'NOV', title: 'Transizione → Inverno', items: ['Ultime uscite trail prima della neve', 'Inizio progressione pesi: target superare 20 kg lower body', 'Se disponibile tapis roulant: 2×30 min Z2/sett'] },
+          { num: 'DIC–FEB', title: 'Blocco ipertrofia puro', items: ['3 sessioni pesi/sett (Upper A, Lower A, Upper B) con progressione carico', 'Sci alpino: ogni giornata conta come sessione cardio Z2–Z3', 'Sci alpinismo: 2–3 uscite/mese = long run di qualità', 'Magnesio 300 mg/sera costante tutto l\'inverno'] },
+          { num: 'MAR', title: 'Transizione → Primavera', badge: 'RIPARTENZA', badgeColor: '#22c55e', items: ['Appena la neve lo permette: riprendi corsa outdoor Z1', 'Prima settimana: max 20–25 min totali, terreno piatto', 'Pesi: inizia a ridurre volume, mantieni intensità'] },
+        ]
+      },
+      {
+        id: 'p4',
+        months: 'APR 2027',
+        name: 'Fase 4 — Pre-Gara',
+        tag: '4 SETTIMANE',
+        color: '#a855f7',
+        focus: 'Blocco specifico trail: un mini-programma di 4 settimane concentrato (2 costruzione + 1 picco + 1 taper). Deriva direttamente dalla struttura del programma 6 settimane già testato.',
+        weeks: [
+          { num: 'APR W1', title: 'Riattivazione trail', items: ['Z2 progressivo: 40 → 55 min su percorso trail', 'Z4 breve: 3×5 min — ritrovare il ritmo soglia', 'Pesi: volume –30% rispetto all\'inverno'] },
+          { num: 'APR W2', title: 'Costruzione specifica', items: ['Long run 65–70 min su percorso simile TDL', 'Z4 soglia: 4×5 min a ~4:40 min/km', 'Simulazione gel + protocollo completo'] },
+          { num: 'APR W3', title: 'Picco + Simulazione', items: ['Uscita simulazione: 75–80 min percorso TDL (se possibile)', 'Z4 affilata: 3×6 min a 4:35', 'Protocollo anti-crampi completo: isometria bulgaro, magnesio 400 mg'] },
+          { num: 'APR W4', title: 'TAPER + GARA', badge: '🏆 GARA', badgeColor: '#a855f7', items: ['Lunedì–Mercoledì: attivazione leggera, nessuna fatica', 'Giovedì–Sabato: riposo totale, carico glicogeno', 'Domenica: TRAIL DELLE LONGANE — Sub 1h20m'] },
+        ]
+      },
+    ];
+
+    // ── BUILD TIMELINE ──
+    const container = document.getElementById('timeline-container');
+    phases.forEach(p => {
+      const block = document.createElement('div');
+      block.className = 'phase-block';
+
+      const dot = document.createElement('div');
+      dot.className = 'phase-dot';
+      dot.style.borderColor = p.color;
+      dot.style.color = p.color;
+      dot.textContent = p.id.replace('p','');
+      block.appendChild(dot);
+
+      const card = document.createElement('div');
+      card.className = 'phase-card';
+      card.style.borderLeftColor = p.color;
+      card.style.color = p.color;
+
+      // header
+      const hdr = document.createElement('div');
+      hdr.className = 'phase-header';
+      hdr.innerHTML = `
+        <span class="phase-months">${p.months}</span>
+        <span class="phase-name" style="color:var(--text)">${p.name}</span>
+        <span class="phase-tag" style="color:${p.color};border-color:${p.color}40">${p.tag}</span>
+        <span class="phase-chevron">▾</span>
+      `;
+      card.appendChild(hdr);
+
+      // focus
+      const focus = document.createElement('div');
+      focus.className = 'phase-focus';
+      focus.textContent = p.focus;
+      card.appendChild(focus);
+
+      // body
+      const body = document.createElement('div');
+      body.className = 'phase-body';
+      p.weeks.forEach(w => {
+        const row = document.createElement('div');
+        row.className = 'week-row';
+        let badgeHTML = '';
+        if (w.badge) {
+          badgeHTML = `<span class="week-badge" style="color:${w.badgeColor};border-color:${w.badgeColor}40">${w.badge}</span>`;
+        }
+        row.innerHTML = `
+          <div class="week-num">${w.num}</div>
+          <div class="week-content">
+            <div class="week-title" style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+              <span>${w.title}</span>${badgeHTML}
+            </div>
+            <div class="week-items">${w.items.map(i => `<div class="week-item">${i}</div>`).join('')}</div>
+          </div>
+        `;
+        body.appendChild(row);
+      });
+      card.appendChild(body);
+
+      // toggle
+      hdr.addEventListener('click', () => {
+        const isOpen = card.classList.contains('open');
+        document.querySelectorAll('.phase-card.open').forEach(c => c.classList.remove('open'));
+        if (!isOpen) card.classList.add('open');
+      });
+
+      block.appendChild(card);
+      container.appendChild(block);
+    });
+
+    // ── WINTER WEEK ──
+    const winterWeek = [
+      { day: 'Lunedì', type: 'PESI', label: 'Upper A — Panca Inclinata + Trazioni', detail: 'Spinta panca inclinata 30-45° | Military Press seduto 90° | Chest Supported Row | Curl + accessori', color: '#f97316' },
+      { day: 'Martedì', type: 'SCI / CARDIO', label: 'Giornata sci alpino oppure 30 min tapis roulant Z2', detail: 'Sci = cardio Z2–Z3 automatico. Tapis roulant se no sci: 30 min a 5:00-5:15 min/km', color: '#7dd3fc' },
+      { day: 'Mercoledì', type: 'RIPOSO', label: 'Recupero attivo', detail: 'Rilascio plantare + mobilità anche + stretching flessori anca. Magnesio 300 mg sera.', color: '#22c55e' },
+      { day: 'Giovedì', type: 'PESI', label: 'Lower A — Forza + Isometrie + Tendini', detail: 'Squat bulgaro isometrico overhead | piede su panca | Nordic Curl assistito | Hip Thrust | Single-leg RDL | Tibial Raise isometrico | Hamstring Walkout su palla', color: '#f97316' },
+      { day: 'Venerdì', type: 'PESI', label: 'Upper B — Intensità / Volume', detail: 'Trazioni supinazione | Cluster set panca | Military Press | Row | Accessori ipertrofia', color: '#f97316' },
+      { day: 'Sabato', type: 'SCI ALPINISMO', label: 'Uscita sci alpinismo (se disponibile)', detail: 'Conta come long run. Porta gel ogni 40 min se uscita > 2h. Mantieni ritmo aerobico sulla salita.', color: '#7dd3fc' },
+      { day: 'Domenica', type: 'RIPOSO', label: 'Riposo totale o camminata rigenerante', detail: '30 min camminata piatta, nessuna intensità. Priorità: recupero completo per la settimana seguente.', color: '#22c55e' },
+    ];
+
+    const wwc = document.getElementById('winter-week-container');
+    const typeColors = { 'PESI': '#f97316', 'SCI / CARDIO': '#7dd3fc', 'SCI ALPINISMO': '#7dd3fc', 'RIPOSO': '#22c55e' };
+    winterWeek.forEach(s => {
+      const tc = typeColors[s.type] || '#8b949e';
+      const card = document.createElement('div');
+      card.style.cssText = `background:var(--bg3);border:1px solid var(--border);border-left:3px solid ${tc};padding:12px 14px;margin-bottom:8px;`;
+      card.innerHTML = `
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px">
+          <span style="font-size:10px;color:var(--muted);letter-spacing:2px;font-family:'Barlow',sans-serif">${s.day.toUpperCase()}</span>
+          <span style="font-size:8px;letter-spacing:2px;padding:1px 6px;border:1px solid ${tc}44;color:${tc};font-weight:700">${s.type}</span>
+        </div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:4px">${s.label}</div>
+        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:var(--muted);line-height:1.5">${s.detail}</div>
+      `;
+      wwc.appendChild(card);
+    });
+
+    // ── RACE STRATEGY ──
+    const strategy = [
+      { km: '0–5 km', label: 'Partenza controllata', detail: 'Z3 gestito. Non seguire chi parte veloce. Il primo km deve sembrare quasi lento.', color: '#22c55e' },
+      { km: 'Salite', label: 'Bastoncini + passi corti', detail: 'Attiva i bastoncini su ogni pendenza >15%. Passo brevissimo e frequente, non lungo e forzato.', color: '#f97316' },
+      { km: 'Discese', label: 'Corpo in avanti, fiducia', detail: 'Non frenare. Il corpo in avanti e il passo breve danno stabilità. Qui si recuperano minuti.', color: '#3b82f6' },
+      { km: 'Gel', label: 'A 20, 45 e 65 min', detail: 'Non aspettare di sentire fame o crampi. Gel con sodio ≥150mg. Sale ai ristori.', color: '#eab308' },
+      { km: 'Ultima salita', label: 'Protocollo crampi 2023', detail: 'Riduci il ritmo al primo segnale. Respiro controllato, passo brevissimo. Hai il magnesio in sistema.', color: '#a855f7' },
+    ];
+
+    const rsc = document.getElementById('race-strategy-container');
+    strategy.forEach(s => {
+      const card = document.createElement('div');
+      card.style.cssText = `background:var(--bg3);border:1px solid var(--border);border-left:4px solid ${s.color};padding:14px 16px;margin-bottom:8px;`;
+      card.innerHTML = `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+          <span style="font-size:9px;color:${s.color};letter-spacing:2px;font-weight:700;border:1px solid ${s.color}44;padding:2px 8px">${s.km}</span>
+          <span style="font-size:14px;font-weight:800;color:${s.color}">${s.label}</span>
+        </div>
+        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:var(--muted);line-height:1.6">${s.detail}</div>
+      `;
+      rsc.appendChild(card);
+    });
+
+    // ── LOWER BODY TAB ──
+    const lowerPhases = [
+      {
+        id: 'lower-p1',
+        sessions: [
+          {
+            title: 'Lower A — Base Forza + Protezione Ginocchio',
+            tag: 'OGNI SETTIMANA',
+            tagColor: '#3b82f6',
+            groups: [
+              {
+                label: 'FORZA UNILATERALE',
+                color: '#f97316',
+                exercises: [
+                  'Squat Bulgaro 14→20 kg: 4x8 | Piede su panca | ISOMETRIA 3 sec in basso | Riposo 2\'30"',
+                  'Affondi camminati manubri 16→20 kg: 3x12 per gamba | Riposo 2\'',
+                  'Step-up sulla panca 10→16 kg: 3x12 per gamba | Riposo 90" | simula gradoni gara',
+                ]
+              },
+              {
+                label: 'CATENA POSTERIORE',
+                color: '#3b82f6',
+                exercises: [
+                  'Romanian Deadlift manubri 18→20 kg: 3x10 | Controllo eccentrico 3 sec | Riposo 2\'',
+                  'Hip Thrust manubri: 3x12 | Pausa 1 sec in alto | Riposo 90"',
+                  'Nordic Curl / GHR assistito: 3x5 | Riposo 3\' | fondamentale per ginocchio',
+                ]
+              },
+              {
+                label: 'ISOMETRIE E TENDINI (prevenzione infortuni)',
+                color: '#22c55e',
+                exercises: [
+                  'Tibial Raise isometrico: 3x30 sec per gamba | rinforza tibiale ant. e piede cavo',
+                  'Hamstring Walkout su palla medica: 3x8 passi | bacino alto, lento e controllato',
+                  'Single-leg Glute Bridge: 3x15 per lato',
+                  'Calf Raise eccentrico su scalino: 3x15 (3 sec discesa) | per il piede cavo',
+                ]
+              },
+              {
+                label: 'STABILITA\' CORE-ANCA',
+                color: '#a855f7',
+                exercises: [
+                  'Side Plank con sollevamento gamba: 3x20 sec per lato | abduttori + core',
+                  'Dead Bug: 3x10 per lato | lento e controllato',
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'lower-p2',
+        sessions: [
+          {
+            title: 'Lower A — Forza Pesante (stessi esercizi, carichi maggiori)',
+            tag: 'LUG–AGO',
+            tagColor: '#f97316',
+            groups: [
+              {
+                label: 'PROGRESSIONE CARICHI',
+                color: '#f97316',
+                exercises: [
+                  'Squat Bulgaro: progressione verso 22-24 kg | aggiunta isometria overhead con manubrio leggero (5 kg)',
+                  'Single-leg RDL con manubrio 14→18 kg: 3x10 | equilibrio su una gamba',
+                  'Nordic Curl: 3x6-8 | aumenta le rep gradualmente',
+                ]
+              },
+              {
+                label: 'PLIOMETRIA — INTRODUZIONE GRADUALE (da Lug W3)',
+                color: '#eab308',
+                exercises: [
+                  'SETTIMANA 1-2: Solo salti sul posto a due piedi — 3x10 | atterraggio morbido | NO panca ancora',
+                  'SETTIMANA 3-4: Bench Jump con panca bassa (seduto → in piedi esplosivo): 3x6 | stop se fastidio ginocchio',
+                  'SETTIMANA 5+: Bench Jump alternati reattivi sopra panca: 3x8 | min contatto suolo | solo se ginocchio ok',
+                  'Single-Leg Box Jump: rimandato a settembre se spazio disponibile',
+                ]
+              },
+              {
+                label: 'ISOMETRIE AVANZATE',
+                color: '#22c55e',
+                exercises: [
+                  'Squat Bulgaro Isometrico Overhead: fermo in basso con manubrio 5 kg sopra la testa | 3x30 sec | massimo controllo',
+                  'Hamstring Walkout: aumenta a 3x12 passi',
+                  'Tibial Raise isometrico con carico leggero (sacchetto 2-3 kg): 3x30 sec',
+                ]
+              }
+            ]
+          },
+          {
+            title: 'Lower B — Potenza + Tecnica (da Ago, 1x/sett)',
+            tag: 'AGO–OTT',
+            tagColor: '#a855f7',
+            groups: [
+              {
+                label: 'POTENZA ESPLOSIVA',
+                color: '#a855f7',
+                exercises: [
+                  'Seated Box Jump (da panca): 4x5 | massima esplosione, atterraggio morbido | Riposo 3\'',
+                  'Bench Jump reattivi alternati: 3x10 | min contatto suolo | Riposo 2\'30"',
+                  'Skipping alto sul posto: 3x15 sec | trasferisce la potenza nella corsa',
+                ]
+              },
+              {
+                label: 'MANTENIMENTO FORZA',
+                color: '#3b82f6',
+                exercises: [
+                  'Squat Bulgaro 20 kg: 3x6 | non aumentare ulteriormente in estate (volume corsa alto)',
+                  'Nordic Curl: 3x6 | mantenimento',
+                  'Hip Thrust: 3x10',
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'lower-p3',
+        sessions: [
+          {
+            title: 'Lower A — Ipertrofia Invernale (priorità massima)',
+            tag: 'NOV–MAR',
+            tagColor: '#7dd3fc',
+            groups: [
+              {
+                label: 'FORZA PESANTE — PROGRESSIONE INVERNALE',
+                color: '#f97316',
+                exercises: [
+                  'Squat Bulgaro: progressione da 20 kg fino a 26-28 kg | Isometria overhead con 8 kg | Riposo 2\'30"',
+                  'Affondi manubri pesanti: 4x12 per gamba | obiettivo 24 kg entro febbraio',
+                  'RDL manubri: 4x10 con 20-22 kg | Tempo eccentrico 4 sec',
+                  'Hip Thrust: 4x12 | aggiunta carico progressiva',
+                ]
+              },
+              {
+                label: 'CATENA POSTERIORE — VOLUME INVERNALE',
+                color: '#3b82f6',
+                exercises: [
+                  'Nordic Curl / GHR: aumenta a 4x8 | con o senza assistenza | Riposo 3\'',
+                  'Single-leg RDL pesante: 3x10 con 18-20 kg | Riposo 2\'',
+                  'Good Morning manubri: 3x12 | controllo lombare',
+                ]
+              },
+              {
+                label: 'ISOMETRIE AVANZATE — RINFORZO TENDINI',
+                color: '#22c55e',
+                exercises: [
+                  'Squat Bulgaro Isometrico Overhead: 3x40 sec con 8-10 kg | rigidita\' tendinea',
+                  'Hamstring Walkout su palla: 3x15 passi | tendini del ginocchio',
+                  'Tibial Raise isometrico con carico 3-4 kg: 3x40 sec | piede cavo',
+                  'Side Plank + sollevamento gamba: 3x25 sec | stabilizzatori anca',
+                ]
+              },
+              {
+                label: 'PLIOMETRIA LEGGERA (mantenimento SNC — no impatti forti)',
+                color: '#eab308',
+                exercises: [
+                  'Seated Box Jump da panca: 3x5 | cauto, atterraggio morbido | solo se ginocchio ok',
+                  'Salti sul posto 2 piedi: 2x10 | mantenimento pattern esplosivo',
+                  'STOP pliometria se fastidio ginocchio — priorita\' assoluta alla salute',
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        id: 'lower-p4',
+        sessions: [
+          {
+            title: 'Lower Pre-Gara — Affilatura (volume -40%, intensità mantenuta)',
+            tag: 'APR 2027',
+            tagColor: '#a855f7',
+            groups: [
+              {
+                label: 'FORZA — MANTENIMENTO PICCO',
+                color: '#f97316',
+                exercises: [
+                  'Squat Bulgaro 22 kg: 3x6 | Isometria 3 sec | piede su panca | Riposo 2\'30"',
+                  'Affondi 20 kg: 3x8 per gamba',
+                  'Nordic Curl: 3x5 | mantenimento',
+                ]
+              },
+              {
+                label: 'ATTIVAZIONE NEUROMUSCOLARE',
+                color: '#a855f7',
+                exercises: [
+                  'Seated Box Jump: 3x4 | esplosivi, freschi | 3 giorni prima della gara al massimo',
+                  'Skipping alto: 2x10 sec | attivazione pattern corsa',
+                  'Calf Raise esplosivo: 2x15 | caviglia pronta per le salite',
+                ]
+              },
+              {
+                label: 'ISOMETRIE FINALI (ultimi 10 giorni)',
+                color: '#22c55e',
+                exercises: [
+                  'Squat bulgaro isometrico: 2x30 sec | protocollo anti-crampi neuromuscolare',
+                  'Tibial Raise: 2x30 sec | piede cavo attivato',
+                  'Magnesio 400 mg/sera in tutta la settimana di gara',
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const glossary = [
+      { name: 'Nordic Curl / GHR assistito', why: 'Protegge il ginocchio (femorali). Fondamentale con il tuo storico infortuni. Si parte assistiti (piedi sotto il divano), si progredisce.', risk: 'BASSO', color: '#22c55e' },
+      { name: 'Squat Bulgaro Isometrico Overhead', why: 'Upgrade del bulgaro standard: manubrio sopra la testa obbliga il core e il ginocchio a stabilizzarsi. Specifico per le salite trail.', risk: 'BASSO', color: '#22c55e' },
+      { name: 'Tibial Raise Isometrico', why: 'Rinforza il tibiale anteriore — muscolo spesso trascurato ma critico per il piede cavo e la prevenzione periostite.', risk: 'BASSO', color: '#22c55e' },
+      { name: 'Hamstring Walkout su palla', why: 'Rinforza i tendini del ginocchio in modo isometrico. Zero impatto, massima protezione.', risk: 'BASSO', color: '#22c55e' },
+      { name: 'Side Plank + sollevamento gamba', why: 'Abduttori e stabilizzatori anca: prevengono il cedimento laterale in salita che porta ai crampi.', risk: 'BASSO', color: '#22c55e' },
+      { name: 'Seated Box Jump (da panca)', why: 'Pliometria seduta: elimina il precarico riducendo lo stress sul ginocchio rispetto ai box jump classici. Allena l\'esplosione pura.', risk: 'MEDIO — solo da luglio, ginocchio rinforzato', color: '#eab308' },
+      { name: 'Bench Jump reattivi alternati', why: 'Pliometria reattiva: riduce il tempo di contatto, esattamente il gesto delle discese veloci trail.', risk: 'MEDIO — solo da agosto, dopo 4 sett di seated jump', color: '#eab308' },
+      { name: 'Single-Leg Box Jump', why: 'Pliometria unilaterale: massimo trasferimento specifico al trail. Solo se spazio disponibile e ginocchio ok.', risk: 'ALTO — solo da estate avanzata, mai in periodi ad alto volume corsa', color: '#ef4444' },
+    ];
+
+    // Build lower body phase cards
+    lowerPhases.forEach(phase => {
+      const container = document.getElementById(phase.id);
+      if (!container) return;
+      phase.sessions.forEach(session => {
+        const sessionEl = document.createElement('div');
+        sessionEl.style.cssText = 'background:var(--bg3);border:1px solid var(--border);margin-bottom:12px;overflow:hidden;';
+
+        // session header
+        const sHdr = document.createElement('div');
+        sHdr.style.cssText = 'padding:13px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;cursor:pointer;';
+        sHdr.innerHTML = `
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:800">${session.title}</div>
+          </div>
+          <span style="font-size:8px;letter-spacing:2px;padding:2px 8px;border:1px solid ${session.tagColor}44;color:${session.tagColor};font-weight:700">${session.tag}</span>
+          <span style="color:var(--dim);font-size:14px;transition:transform 0.2s" class="ex-chev">▾</span>
+        `;
+
+        const sBody = document.createElement('div');
+        sBody.style.cssText = 'display:none;border-top:1px solid var(--border);padding:14px 16px;';
+
+        session.groups.forEach(group => {
+          const grpLabel = document.createElement('div');
+          grpLabel.style.cssText = `font-size:9px;letter-spacing:3px;color:${group.color};font-weight:700;margin-bottom:8px;margin-top:12px;text-transform:uppercase;`;
+          grpLabel.textContent = group.label;
+          sBody.appendChild(grpLabel);
+
+          group.exercises.forEach(ex => {
+            const exEl = document.createElement('div');
+            exEl.style.cssText = 'display:flex;gap:8px;align-items:flex-start;padding:6px 10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);margin-bottom:4px;font-family:"Barlow",sans-serif;font-size:12px;line-height:1.5;';
+            exEl.innerHTML = `<span style="color:${group.color};flex-shrink:0;margin-top:2px;font-size:9px">▸</span><span>${ex}</span>`;
+            sBody.appendChild(exEl);
+          });
+        });
+
+        sHdr.addEventListener('click', () => {
+          const isOpen = sBody.style.display === 'block';
+          sBody.style.display = isOpen ? 'none' : 'block';
+          sHdr.querySelector('.ex-chev').style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+          sessionEl.style.borderColor = isOpen ? 'var(--border)' : group_colors_first(session);
+        });
+
+        function group_colors_first(s) { return s.groups[0] ? s.groups[0].color : 'var(--accent)'; }
+
+        sessionEl.appendChild(sHdr);
+        sessionEl.appendChild(sBody);
+        container.appendChild(sessionEl);
+      });
+    });
+
+    // Build glossary
+    const glossaryEl = document.getElementById('lower-glossary');
+    glossary.forEach(ex => {
+      const card = document.createElement('div');
+      card.style.cssText = `background:var(--bg3);border:1px solid var(--border);border-left:3px solid ${ex.color};padding:12px 14px;margin-bottom:8px;`;
+      card.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:5px;flex-wrap:wrap;">
+          <span style="font-size:13px;font-weight:800">${ex.name}</span>
+          <span style="font-size:8px;letter-spacing:1px;padding:2px 7px;border:1px solid ${ex.color}44;color:${ex.color};font-weight:700;flex-shrink:0">RISCHIO: ${ex.risk}</span>
+        </div>
+        <div style="font-family:'Barlow',sans-serif;font-size:12px;color:var(--muted);line-height:1.6">${ex.why}</div>
+      `;
+      glossaryEl.appendChild(card);
+    });
+
+    
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+      });
+    });
+
+  })();
+  </script>
+</body>
+</html>
